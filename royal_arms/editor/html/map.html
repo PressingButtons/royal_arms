@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Map</title>
+    <link rel="stylesheet" href="../../css/reset.css">
+    <link rel="stylesheet" href="../../css/base.css">
+    <link rel="stylesheet" href="../../css/editor.css">
+    <script type="module" src="../../global/utils.js"> </script>
+    <script type="module" src="../js/index.js"> </script>
+  </head>
+  <body class='flex'>
+
+    <div class="grow flex center" id="workspace">
+      <div class="container">
+        <canvas id="main"></canvas>
+        <canvas id="plot"></canvas>
+        <svg class='full'>
+          <pattern id="grid" width="16" height="16" patternUnits="userSpaceOnUse">
+            <path d="M 16 0 L 0 0 0 16" fill="none" stroke="rgba(255, 255, 255, 0.6)" stroke-width="0.5"/>
+          </pattern>
+          <rect width="100%" height="100%" fill="url(#grid)"/>
+          <line x1="0" y1="50%" x2="100%" y2 ="50%" stroke="red"/>
+          <line x1="50%" y1="0" x2="50%" y2 ="100%" stroke="blue"/>
+          <rect id="cameraRect" width="380" height="240" stroke="green" fill="none"/>
+          <rect id="listener" width="100%" height="100%" fill="rgba(0, 0, 0, 0)"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="flex" id="tiles">
+
+    </div>
+
+    <div class="flex col" id="interface">
+      <p>Test</p>
+    </div>
+
+  </body>
+</html>

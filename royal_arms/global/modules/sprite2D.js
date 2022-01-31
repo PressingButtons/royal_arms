@@ -1,4 +1,4 @@
-const Sprite2D = function( ) {
+export default function Sprite2D ( ) {
 
   let image, frames, width, height, frameWidth, frameHeight;
 
@@ -20,6 +20,7 @@ const Sprite2D = function( ) {
     get frameHeight( ) {return frameHeight},
     get frameWidth( ) {return frameWidth},
     get src( ) {return image},
+    get frameCount( ) {return frames.length},
     frame: getFrame
   }
 
@@ -28,16 +29,13 @@ const Sprite2D = function( ) {
 const cacheFrames = (image, fW, fH) => {
   let frames = [];
   const rows = (image.height/fH) | 0;
-  const cols = (image.rows/fW) | 0;
+  const cols = (image.width/fW) | 0;
   for(let i = 0; i < rows; i++) {
     for(let j = 0; j < cols; j++) {
-      const frame = document.createElement('canvas');
-      frame.width = fW;
-      frame.height = fH;
-      frame.getContext('2d').imageSmoothingEnabled = false;
+      const frame = generateCanvas(fW, fH);
       let x = j * fW, y = i * fH;
-      frame.getContext('2d').drawImage(image, x, y, fW, fH, 0, 0, fW, fH);
-      frames.push(frame);
+      frame.ctx.drawImage(image, x, y, fW, fH, 0, 0, fW, fH);
+      frames.push(frame.canvas);
     }
   }
   return frames;

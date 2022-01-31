@@ -1,0 +1,67 @@
+body {
+  font-size: 1.2em;
+  font-family: Arial, sans-serif;
+}
+
+
+#hierarchy {
+  width: 230px;
+}
+
+#interface {
+  width: 320px;
+  background: #CCC;
+  color: #70707A;
+}
+
+#workspace {
+  background-color: #666;
+}
+
+#workspace > .container {
+  background: black;
+  cursor: crosshair;
+}
+
+#plot, .container > svg {
+  position: absolute;
+  top:0;
+  left:0;
+}
+
+#plot {
+  display: none;
+}
+
+.container:hover #plot {
+  border: 1px solid white;
+  display: block;
+}
+
+#cameraRect {
+  transform: translate(50%, 50%) translate(-190px, -120px);
+}
+
+#tiles {
+  width: 250px;
+  max-width: 250px;
+  overflow: auto;
+  background: #333;
+  flex-wrap: wrap;
+}
+
+#tiles canvas {
+  width: 32px;
+  height: 32px;
+  margin: 4px;
+  border: 1px solid transparent;
+  box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.3);
+}
+
+#tiles canvas:hover {
+  border-color: white;
+}
+
+#tiles canvas.selected {
+  border-color: red;
+}
