@@ -5,7 +5,6 @@ import StampDown from './stampdownstate.js';
 class StampMachine extends Machine {
   constructor(listener) {
     super(StampUp, StampDown);
-    console.log(this.states.stampup);
     this.switchState(this.states.stampup);
     this.#bind(listener);
   }

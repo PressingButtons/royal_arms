@@ -7,6 +7,7 @@ class StampDown extends MachineState {
   }
 
   exitState( ) {
+
   }
 
   enterState( ) {
@@ -14,7 +15,7 @@ class StampDown extends MachineState {
   }
 
   update(config) {
-    document.dispatchEvent(new CustomEvent('stamp', {detail: config.pos }));
+    document.dispatchEvent(new CustomEvent('stamp', {detail: config }));
   }
 
 }

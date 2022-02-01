@@ -8,7 +8,8 @@ window.generateElement = (type, properties = {}) => {
     element.style[styleName] = properties.css[styleName];
   }
   for(const className in properties.classes) {
-    element.classList.add(className);
+    const list = properties.classes[className].split(' ');
+    list.forEach(name => element.classList.add(name));
   }
   return element;
 }

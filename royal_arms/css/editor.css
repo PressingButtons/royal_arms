@@ -23,7 +23,7 @@ body {
   cursor: crosshair;
 }
 
-#plot, .container > svg {
+#plot, .container > svg, #canvasLayers {
   position: absolute;
   top:0;
   left:0;
@@ -64,4 +64,13 @@ body {
 
 #tiles canvas.selected {
   border-color: red;
+}
+
+#canvasLayers canvas {
+  position: absolute;
+}
+
+#layerlist canvas {
+  max-width: 100px;
+  max-height: 100px;
 }

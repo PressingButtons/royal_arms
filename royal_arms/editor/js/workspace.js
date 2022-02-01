@@ -5,6 +5,7 @@ export default function(container, tilesize) {
   const main = container.querySelector('#main');
   const plot = container.querySelector('#plot');
   const cam  = container.querySelector('#cameraRect');
+  const layers = container.querySelector('#canvasLayers');
   const listener = container.querySelector('#listener');
   const stamp = new StampTool(listener);
 
@@ -13,16 +14,38 @@ export default function(container, tilesize) {
   plot.width = 16;
   plot.height = 16;
 
-  function handleMouseMove(event) {
+  function convertToTilePosition(pos) {
+    const row = (pos.y / tilesize) | 0;
+    const col = (pos.x / tilesize) | 0;
+    return {row: row, col: col};
+  }
+
+  function handleMouse(event) {
     const pos = relativeMousePosition(event);
+    const tilepos = convertToTilePosition(pos);
+    if(event.type == 'mousedown') handleMouseDown(event, pos, tilepos);
+    if(event.type =='mousemove')  handleMouseMove(event, pos, tilepos);
+  }
+
+  function handleMouseDown(event, pos, tilepos) {
+    stamp.update(tilepos);
+  }
+
+  function handleMouseMove(event, pos, tilepos) {
     moveCursor(pos);
-    stamp.update(pos);
+    stamp.update(tilepos);
+  }
+
+  function handleNewLayer(event) {
+    selectLayer(event);
+    layers.append(event.detail.layer.canvas.canvas);
   }
 
   function handleStamp(event) {
     document.dispatchEvent(new CustomEvent('plottile', {detail: {
       value: currentTile,
-      layer: currentLayer
+      data: currentLayer,
+      pos: event.detail
     }}))
   }
 
@@ -31,13 +54,21 @@ export default function(container, tilesize) {
   }
 
   function moveCursor(pos) {
-    const x = ((pos.x / tilesize) | 0) * tilesize;
-    const y = ((pos.y / tilesize) | 0) * tilesize;
-    plot.style.top = y + 'px';
-    plot.style.left = x + 'px';
+    const col = ((pos.x / tilesize) | 0);
+    const row = ((pos.y / tilesize) | 0);
+
+    stamp.update({row: row, col: col});
+    plot.style.top = row * tilesize + 'px';
+    plot.style.left = col * tilesize + 'px';
   }
 
-  listener.onmousemove = handleMouseMove;
+  function updateStamp(pos) {
+    const col = (pos.x / tilesize) | 0;
+    const row = (pos.y / tilesize) | 0;
+  }
+
+  listener.onmousemove = handleMouse;
+  listener.onmousedown = handleMouse;
 
   const resize = (w, h) => {
     main.width = w
@@ -56,7 +87,7 @@ export default function(container, tilesize) {
   }
 
 
-  document.addEventListener('newlayer', selectLayer);
+  document.addEventListener('newlayer', handleNewLayer);
   document.addEventListener('selectlayer', selectLayer);
   document.addEventListener('stamp', handleStamp);
 

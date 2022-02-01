@@ -9,8 +9,13 @@ const TILESIZE = 16;
 window.onload = event => {
   const sprite = new Sprite2D( );
   const workspace = new Workspace(document.querySelector('#workspace > .container'), TILESIZE);
-  ///
   let project;
+
+  function init(html) {
+    document.querySelector('#interface').innerHTML = html;
+    retriever.image('../../assets/sprites/tiles.png').then(main);
+  }
+  ///
 
   const main = tilesheet => {
     document.addEventListener('newlayer', handleNewLayer);
@@ -26,6 +31,5 @@ window.onload = event => {
 
 
   //exec =========================================================================
-  retriever.image('../../assets/sprites/tiles.png').then(main);
-
+  retriever.text('./ui.html').then(init);
 }

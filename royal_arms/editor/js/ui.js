@@ -12,5 +12,19 @@ export function populateSprites(sprite) {
 }
 
 export function loadLayer(layer) {
+  const list = document.getElementById('layerlist');
+  const div = createListEntry(layer);
+  list.append(div)
+}
 
+const createListEntry = source => {
+  const div = generateElement('div', {classes: ['layer container flex']});
+  div.innerHTML = `
+    <canvas></canvas>
+    <div class="flex col">
+      <p>Layer ${source.layer.index}</p>
+      <p>${source.layer.map.length} x ${source.layer.map[0].length}</p>
+    </div>
+  `
+  return div;
 }

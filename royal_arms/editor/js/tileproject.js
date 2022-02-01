@@ -6,7 +6,8 @@ const TileProject = function(width, height, tilesize, background = null) {
   this.rows = (height/tilesize) | 0
   this.cols = (width/tilesize) | 0
   this.addLayer( );
-  document.addEventListener('plottile', this.handlePlot);
+  this.tilesize = tilesize;
+  document.addEventListener('plottile', this.handlePlot.bind(this));
 }
 
 TileProject.prototype.addLayer = function( ) {
@@ -15,7 +16,7 @@ TileProject.prototype.addLayer = function( ) {
     map: new Array(this.rows).fill(new Array(this.cols).fill(0))
   }
   this.layers.push(layer)
-  document.dispatchEvent(new CustomEvent('newlayer', {detail: {layer: layer, index: layer.length - 1}}));
+  document.dispatchEvent(new CustomEvent('newlayer', {detail: { layer: layer, index: this.layers.length - 1}}));
 }
 
 TileProject.prototype.load = function(config) {
@@ -42,8 +43,24 @@ TileProject.prototype.plot = function(layerIndex, row, col, value) {
   this.layers[layerIndex].map[row][col] = value;
 }
 
-TileProject.prototype.handlePlot = function(event) {
-  console.log(event.detail);
+TileProject.prototype.drawTile = function(event) {
+  const tile = event.detail.value.tile;
+  const ctx  = event.detail.data.layer.canvas.ctx;
+  const x = event.detail.pos.col * this.tilesize;
+  const y = event.detail.pos.row * this.tilesize;
+  ctx.clearRect(x, y, this.tilesize, this.tilesize);
+  ctx.drawImage(tile, x, y);
 }
+
+TileProject.prototype.handlePlot = function(event) {
+  if(event.detail.value) {
+    const pos = event.detail.pos;
+    const map = event.detail.data.layer.map;
+    map[pos.row][pos.col] = event.detail.value.value;
+    this.drawTile(event);
+  }
+}
+
+
 
 export default TileProject
