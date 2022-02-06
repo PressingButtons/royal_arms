@@ -1,4 +1,4 @@
-import main from './drivers/test00.js';
+import main from './drivers/test01.js';
 import * as Screen from './modules/screen.js';
 
 window.onload = event => {
