@@ -11,10 +11,9 @@
   </head>
   <body class='flex'>
 
-    <div class="grow flex center" id="workspace">
+    <div class="grow flex centered scrollable" id="workspace">
       <div class="container">
         <canvas id="main"></canvas>
-        <div id='canvasLayers'></div>
         <canvas id="plot"></canvas>
         <svg class='full'>
           <pattern id="grid" width="16" height="16" patternUnits="userSpaceOnUse">
@@ -29,8 +28,19 @@
       </div>
     </div>
 
-    <div class="flex" id="tiles">
+    <div class="flex col" id='tiles'>
+      <h1>Utility Tiles</h1>
+      <div class="flex scrollY" id='uTiles'>
 
+      </div>
+      <h1>Collision Tiles</h1>
+      <div class="flex scrollY" id='cTiles'>
+
+      </div>
+      <h1>Graphic Tiles</h1>
+      <div class="flex scrollY" id='gTiles'>
+
+      </div>
     </div>
 
     <div class="flex col" id="interface">

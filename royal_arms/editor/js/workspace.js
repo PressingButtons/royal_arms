@@ -1,4 +1,4 @@
-import StampTool from './tools/stamp/stampmachine.js';
+import StampTool from './tools/stamp/stamp.js';
 
 export default function(container, tilesize) {
 
@@ -9,7 +9,8 @@ export default function(container, tilesize) {
   const listener = container.querySelector('#listener');
   const stamp = new StampTool(listener);
 
-  let currentTile, currentLayer;
+  let currentTile, currentLayer, collisionLayer;
+  let zoomValue = 1;
 
   plot.width = 16;
   plot.height = 16;
@@ -22,6 +23,8 @@ export default function(container, tilesize) {
 
   function handleMouse(event) {
     const pos = relativeMousePosition(event);
+    pos.x /= zoomValue;
+    pos.y /= zoomValue;
     const tilepos = convertToTilePosition(pos);
     if(event.type == 'mousedown') handleMouseDown(event, pos, tilepos);
     if(event.type =='mousemove')  handleMouseMove(event, pos, tilepos);
@@ -43,10 +46,21 @@ export default function(container, tilesize) {
 
   function handleStamp(event) {
     document.dispatchEvent(new CustomEvent('plottile', {detail: {
-      value: currentTile,
-      data: currentLayer,
+      tile: currentTile,
+      layer: currentLayer,
       pos: event.detail
     }}))
+  }
+
+  function handleZoom(event) {
+    if(event.type == 'wheel') {
+      event.preventDefault( );
+      if(event.deltaY < 0) zoomValue += 0.01;
+      else zoomValue -= 0.01
+    } else {
+      if(event.key.toLowerCase() == 'z') zoomValue = 1;
+    }
+    container.style.transform = `scale(${zoomValue})`
   }
 
   function loadProject(project) {
@@ -62,9 +76,15 @@ export default function(container, tilesize) {
     plot.style.left = col * tilesize + 'px';
   }
 
-  function updateStamp(pos) {
-    const col = (pos.x / tilesize) | 0;
-    const row = (pos.y / tilesize) | 0;
+  function setCurrentTile(type, value, graphic) {
+    currentTile = {type: type, value: value, graphic: graphic};
+    updateStampGraphic(graphic);
+  }
+
+  function updateStampGraphic(graphic) {
+    plot.getContext('2d').globalAlpha = 0.4;
+    plot.getContext('2d').clearRect(0, 0, tilesize, tilesize);
+    plot.getContext('2d').drawImage(graphic, 0, 0);
   }
 
   listener.onmousemove = handleMouse;
@@ -75,13 +95,6 @@ export default function(container, tilesize) {
     main.height = h;
   }
 
-  document.addEventListener('selecttile', event => {
-    currentTile = event.detail;
-    plot.getContext('2d').globalAlpha = 0.4;
-    plot.getContext('2d').clearRect(0, 0, tilesize, tilesize);
-    plot.getContext('2d').drawImage(currentTile.tile, 0, 0);
-  });
-
   const selectLayer = event => {
     currentLayer = event.detail;
   }
@@ -90,9 +103,12 @@ export default function(container, tilesize) {
   document.addEventListener('newlayer', handleNewLayer);
   document.addEventListener('selectlayer', selectLayer);
   document.addEventListener('stamp', handleStamp);
+  container.addEventListener('wheel', handleZoom);
+  document.addEventListener('keyup', handleZoom);
 
   return {
-    loadProject: loadProject
+    loadProject: loadProject,
+    setCurrentTile: setCurrentTile,
   }
 
 }

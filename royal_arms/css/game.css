@@ -1,3 +1,14 @@
 body {
   background: #444;
 }
+
+.container {
+  transform: scale(3);
+  white-space: normal;
+  padding: 0;
+  margin: 0;
+  border: 1px solid black;
+}
+
+canvas {
+}

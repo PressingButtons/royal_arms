@@ -38,3 +38,16 @@ window.relativeMousePosition = function(event) {
     y: event.clientY - rect.y
   }
 }
+
+window.loadImage = function(url) {
+  return new Promise(function(resolve, reject) {
+    const image = new Image( );
+    image.onload = event => {
+      resolve(image);
+    }
+    image.onerror = event => {
+      reject(event);
+    }
+    image.src = url;
+  });
+}

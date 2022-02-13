@@ -1,0 +1,6 @@
+{
+  "vertex" : "./shaders/src/generic-texture-vertex.glsl",
+  "fragment" : "./shaders/src/generic-texture-fragment.glsl",
+  "attributes" : ["a_position", "a_texture"],
+  "uniforms"   : ["u_ortho_matrix", "u_transform_matrix"]
+}

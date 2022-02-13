@@ -1,0 +1,6 @@
+{
+  "vertex" : "./shaders/src/tile-vertex.glsl",
+  "fragment" : "./shaders/src/tile-fragment.glsl",
+  "attributes" : ["a_position", "a_texture"],
+  "uniforms"   : ["u_ortho_matrix", "u_transform_matrix", "u_tile_factor", "atlas", "map", "u_size", "u_map_trans_matrix", "u_tilesize"]
+}

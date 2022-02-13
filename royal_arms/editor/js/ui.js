@@ -1,13 +1,28 @@
-export function populateSprites(sprite) {
-  const container = document.getElementById('tiles');
-  for(let i = 0; i < sprite.frameCount; i++ ) {
-    const frame = sprite.frame(i);
-    container.append(frame);
-    frame.addEventListener('click', ev => {
-      document.querySelectorAll('#tiles canvas').forEach(tile => tile.classList.remove('selected'));
-      frame.classList.add('selected');
-      document.dispatchEvent(new CustomEvent('selecttile', {detail: {value: i, tile: frame}}));
-    })
+function hiliteSelection(event) {
+  for(const tile of document.querySelectorAll('#tiles canvas')) tile.classList.remove('selected');
+  this.classList.add('selected');
+}
+
+function broadcastSelection(type, index) {
+  document.dispatchEvent(new CustomEvent('tileselection', {detail: {type: type, index: index}}));
+}
+
+export function populateTiles(mapbuilder) {
+  for(let i = 0; i < mapbuilder.tiles.length; i++ ) {
+    const tile = mapbuilder.tiles[i];
+    if(i == 0) {
+      document.querySelector('#uTiles').append(tile);
+      tile.addEventListener('click', function(event){broadcastSelection('utility', i)});
+    }
+    else if(i > 0 && i < 14) {
+      document.querySelector('#cTiles').append(tile);
+      tile.addEventListener('click', function(event) {broadcastSelection('collision', i)});
+    }
+    else {
+      document.querySelector('#gTiles').append(tile);
+      tile.addEventListener('click', function(event) {broadcastSelection('graphic', i)});
+    }
+    tile.addEventListener('click', hiliteSelection);
   }
 }
 

@@ -33,6 +33,7 @@ export default function main( ) {
     drawObject(box);
     drawObject(player);
     for(const bullet of bullets) {
+      bullet.update({dt: dt, gravity: 6})
       bullet.move(bullet.velocity);
       if(bullet.left > 1000 || Collision.AABB(bullet, box)) {
         bullets.splice(bullets.indexOf(bullet), 1);

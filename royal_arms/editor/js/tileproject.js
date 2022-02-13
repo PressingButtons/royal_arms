@@ -19,7 +19,7 @@ TileProject.prototype.addLayer = function( ) {
   document.dispatchEvent(new CustomEvent('newlayer', {detail: { layer: layer, index: this.layers.length - 1}}));
 }
 
-TileProject.prototype.load = function(config) {
+TileProject.prototype.importData = function(config) {
   this.background = config.background;
   this.rows = config.rows;
   this.cols = config.cols;
@@ -28,7 +28,7 @@ TileProject.prototype.load = function(config) {
   this.layers = config.layers.map(x => generateCanvas(x));
 }
 
-TileProject.prototype.export = function( ) {
+TileProject.prototype.exportData = function( ) {
   return {
     rows: this.rows,
     cols: this.cols,

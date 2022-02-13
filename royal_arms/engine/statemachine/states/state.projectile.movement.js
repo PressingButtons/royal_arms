@@ -7,7 +7,7 @@ export default class ProjectileMovementState extends State {
   }
 
   onUpdate(config) {
-    if(this.machine.gravityFlag) {
+    if(this.machine.gravity) {
       const dt = config.dt * 0.001;
       this.machine.velocity.y += config.gravity * dt;
     }

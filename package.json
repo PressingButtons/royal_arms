@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "gl-matrix": "^3.4.3",
     "serve": "^13.0.2"
   }
 }

@@ -15,15 +15,18 @@ export default class State {
   get machine( ) {return this.#machine};
 
   currentState(deep = true) {
-    if(!this.#currentState) return this;
+    if(!this.#currentState) {
+      return this;
+    }
     else {
-      if(deep) return this.#currentState.currentState;
+      if(deep) return this.#currentState.currentState(deep);
       else return this.#currentState;
     }
   }
 
   addState(state) {
     Object.defineProperty(this.#states, state.name, {value: state});
+    return state;
   }
 
   enterState(config) {
@@ -31,6 +34,10 @@ export default class State {
   }
 
   exitState(config) {
+
+  }
+
+  onUpdate(config) {
 
   }
 
@@ -52,7 +59,8 @@ export default class State {
 
   update(config) {
     this.onUpdate(config);
-    this.#currentState.update(config);
+    if(this.#currentState)
+      this.#currentState.update(config);
   }
 
 }

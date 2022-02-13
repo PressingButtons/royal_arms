@@ -45,9 +45,19 @@ body {
 #tiles {
   width: 250px;
   max-width: 250px;
-  overflow: auto;
   background: #333;
+}
+
+#tiles > div {
+  max-width: 100%;
+  overflow: auto;
   flex-wrap: wrap;
+}
+
+#tiles > h1 {
+  color: white;
+  background: #444;
+  border-bottom: 3px solid #252525;
 }
 
 #tiles canvas {

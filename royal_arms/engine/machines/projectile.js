@@ -7,7 +7,8 @@ export default class Projectile extends GameObject {
 
   constructor(config) {
     super(config.w, config.h, config.body);
-    this.#behavior = new ProjectileBehaviorState(this, config.gravity);
+    this.gravity = config.gravity;
+    this.#behavior = new ProjectileBehaviorState(this);
     this.velocity.radToComponent(config.radians);
     this.velocity.multiply(config.speed);
   }
