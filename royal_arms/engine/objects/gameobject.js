@@ -1,3 +1,4 @@
+import State from '../statemachine/state.js';
 import Vector from '../physics/vector.js'
 
 const AutoId = (function( ) {
@@ -7,23 +8,17 @@ const AutoId = (function( ) {
   }
 })( );
 
-export default class GameObject {
+export default class GameObject extends State {
 
-  #id;
+  #sprite;
 
   constructor(w, h, body) {
-    this.x = 0;
-    this.y = 0;
+    constructor("go" + String(new AutoId( ).id).padStart(4, '0'), null);
+    this.setPosition(0, 0);
     this.w = w;
     this.h = h;
     this.body = body || {x: 0, y: 0, w: w, h: h}
     this.velocity = new Vector( );
-    this.#id = "go" + String(new AutoId( ).id).padStart(4, '0');
-    this.zones = [-1, -1];
-  }
-
-  get id( ) {
-    return this.#id;
   }
 
   get left( ) {return this.x + this.body.x};
@@ -37,6 +32,13 @@ export default class GameObject {
 
   get bottom( ) {return this.y + this.body.y + this.body.h};
   set bottom(n) {this.y = n - this.body.y - this.body.h};
+
+  get center( ) {
+    return {
+      x: this.left + this.body.w / 2,
+      y: this.top + this.body.h / 2,
+    }
+  }
 
 
   move(dx, dy) {

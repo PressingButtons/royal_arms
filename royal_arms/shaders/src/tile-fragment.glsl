@@ -7,7 +7,6 @@ uniform sampler2D atlas;
 uniform sampler2D map;
 
 uniform vec2 u_tile_factor;
-uniform vec2 u_map_factor;
 
 
 void main( ) {
@@ -16,5 +15,5 @@ void main( ) {
   vec2 tile_offset = (mod(floor(v_position), 16.0) / 16.0) * u_tile_factor;
   vec2 pos = start + tile_offset;
   gl_FragColor = texture2D(atlas, pos);
-  //if(index.x == 0.0) gl_FragColor = vec4(1.0, 1.0, 1.0, 0.0);
+  if(index.x == 0.0) gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);
 }

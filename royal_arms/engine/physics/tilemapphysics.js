@@ -1,15 +1,17 @@
+import CollisionMap from '../modules/collisionmap.js';
+
 export default class TilemapPhysics {
 
   #map;
   #tilesize;
 
-  constructor(map, tilesize) {
-    this.#map = map;
+  constructor(canvas, tilesize) {
+    this.#map = new CollisionMap(canvas);
     this.#tilesize = tilesize;
   }
 
-  get width( ) {return this.#map.w }
-  get height( ) {return this.#map.h }
+  get width( ) {return this.#map.w};
+  get height( ) {return this.#map.h};
 
   #getTilePosition(gameobject) {
     const l = (gameobject.left / this.#tilesize)|0;
@@ -19,10 +21,10 @@ export default class TilemapPhysics {
 
     return {
       l: l, r: r, t: t, b: b,
-      tl: this.#map[t][l] || null,
-      tr: this.#map[t][r] || null,
-      bl: this.#map[b][l] || null,
-      br: this.#map[b][r] || null
+      tl: this.#map.tile(t,l),
+      tr: this.#map.tile(t,r),
+      bl: this.#map.tile(b,l),
+      br: this.#map.tile(b,r)
     }
 
   }

@@ -7,7 +7,7 @@ export default class State {
   #states = { };
 
   constructor(name, machine) {
-    this.#machine = machine;
+    this.#machine = machine || this;
     this.#name = name;
   }
 

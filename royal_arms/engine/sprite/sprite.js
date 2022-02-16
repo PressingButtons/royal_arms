@@ -49,7 +49,7 @@ export default class SpriteLib {
     return this.#generateTexture(image).then(texture => this.#packSprite(texture, w, h));
   }
 
-  layer(image, tilesize) {
+  createLayer(image, tilesize) {
     return this.#generateTexture(image).then(texture => this.#packLayer(texture, tilesize));
   }
 

@@ -1,34 +1,29 @@
-import * as Spawner from './spawner.js';
+import State from '../statemachine/state.js';
+import Tilemap from '../tilemap/tilemap.js';
+import Camera from './camera.js';
 
-export default class World {
+export default class World extends State {
 
-  #list = [];
-  #physics;
+  #meta;
+  #tilemap;
+  #entities;
+  #camera;
 
   constructor(config) {
-    this.#physics = new TilemapPhysics(config.map, config.tilesize);
+    super(null, 'world');
+    this.#meta = config.meta;
+    this.#tilemap = new Tilemap(config.tilemap)
+    this.#camera = new Camera(config.meta.w, config.meta.h);
+    this.#entities = [];
   }
 
-  //getters and setters
-  get objects( ) {return this.#list.slice( )}
-  get width( ) {return this.#physics.width}
-  get height( ) {return this.#physics.height}
-  //private
-  //public
+  get camera( ) {return this.#camera;}
 
-  spawn(type, x, y, options) {
-    const object = Spawner.create(type, x, y, options);
-    if(object) {
-      this.#list.push(object);
-      object.world = this;
-      return object;
-    }
-    return null;
-  }
-
-  update(config) {
-    for(const object of this.#list) {
-
+  renderList( ) {
+    return {
+      entities: this.#entities.slice( ),
+      tilemap: this.#tilemap,
+      e_index: this.#meta.e_index
     }
   }
 

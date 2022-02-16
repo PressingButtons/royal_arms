@@ -1,112 +1,45 @@
-import WebGLUtils from '../../webgl-lib/webgl-lib.js';
-import RenderEngine from '../../engine/render/render.js';
-import SpriteLib from '../../engine/sprite/sprite.js';
-import Recorder from '../../engine/modules/recorder.js'
-
-let tileprogram;
-let spritelib;
-let webutils;
-let render;
-let tiles;
-let recorder;
-
-const transform = glMatrix.mat4.create( );
-let ortho;
-
-const sw = 380;
-const sh = 240;
+import Engine from '../../engine/engine.js';
 
 window.onload = event => {
-  init( ).then(main);
-}
-
-async function init( ) {
   const canvas = document.getElementById('canvas');
-  document.addEventListener('downloadrecording', exportRecording);
-  canvas.width = sw;
-  canvas.height = sh;
-  webutils = new WebGLUtils(canvas.getContext('webgl', {premultipliedAlpha: false}));
-  tiles = await loadImage('./assets/sprites/tiles.png');
-  //tileprogram = await webutils.compile('./shaders/generic-texture.json');
-  render = new RenderEngine(webutils);
-  spritelib = new SpriteLib(webutils);
-  render.setViewPort(0, 0, sw, sh);
-  recorder = new Recorder(canvas);
-  await render.init( );
-}
+  canvas.width = 384;
+  canvas.height = 240;
+  const engine = new Engine(canvas.getContext('webgl'));
+  engine.init( ).then(( ) =>  engine.initTiles('./assets/sprites/tiles.webp', 16, 16).then(async(tiles) => {
 
+    const world = await engine.createWorld("sandbox");
+    let right, left, up, down, zi, zo;
 
-function main( ) {
-  const rs = 200;
-  ortho = glMatrix.mat4.ortho(glMatrix.mat4.create(), 0, sw, sh, 0, 1, -1);
+    function readControls( ) {
+      right = engine.controls.keyIsDown('d');
+      left = engine.controls.keyIsDown('a');
+      up = engine.controls.keyIsDown('w');
+      down = engine.controls.keyIsDown('s');
+      zi = engine.controls.keyIsDown('z');
+      zo = engine.controls.keyIsDown('x');
+    }
 
-  webutils.createTexture('./assets/sprites/tiles.png').then( async(texture) => {
+    function updateCamera( ) {
+      let movex = 0, movey = 0, s = 0;
+      if(right) movex += 1;
+      if(left) movex -= 1;
+      if(up) movey -= 1;
+      if(down) movey += 1;
+      if(zi) s += 0.01;
+      if(zo) s -= 0.01;
+      world.camera.x += movex;
+      world.camera.y += movey;
+      world.camera.scale = world.camera.scale + s;
+    }
 
-    const map = await webutils.createTexture('./assets/levels/test.webp').then(texture => spritelib.layer(texture, 16));
-
-    spritelib.create(texture, 16).then(sprite => {
-      const index = new Float32Array([0, 0]);
-
-      let left, right, up, down;
-
-      document.addEventListener('keydown', event => {
-        if(event.key.toLowerCase() == 'arrowleft') left = true;
-        if(event.key.toLowerCase() == 'arrowright') right = true;
-        if(event.key.toLowerCase() == 'arrowup') up = true;
-        if(event.key.toLowerCase() == 'arrowdown') down = true;
-      })
-
-      document.addEventListener('keyup', event => {
-        if(event.key == 'q') index[0] = index[0] < 20 ? index[0] + 1 : 20;
-        if(event.key == 'w') index[0] = index[0] > 0 ?  index[0] - 1 : 0;
-        if(event.key.toLowerCase() == 'arrowleft') left = false;
-        if(event.key.toLowerCase() == 'arrowright') right = false;;
-        if(event.key.toLowerCase() == 'arrowup') up = false;
-        if(event.key.toLowerCase() == 'arrowdown') down = false;
-        if(event.key.toLowerCase() == ' ')  {
-          recorder.start( );
-          console.log('recording started');
-        }
-        if(event.key.toLowerCase() == 'e') {
-          console.log('recording ended');
-          recorder.stop( );
-        }
-      })
-
-      function draw( ) {
-        render.clear(0, 0, 0 ,0);
-        render.drawLayer(sprite, map, transform, ortho, index);
-        render.drawSprite(sprite, transform, ortho, index);
-      }
-
-      function record( ) {
-
-      }
-
-      function move( ) {
-        let xmove = 0;
-        let ymove = 0;
-        if(left) xmove -= 1;
-        if(right) xmove += 1;
-        if(up) ymove -= 1;
-        if(down) ymove += 1;
-        glMatrix.mat4.translate(transform, transform, [xmove, ymove, 0]);
-      }
-
-      function update( ) {
-        move( );
-        draw( );
-        requestAnimationFrame(update);
-      }
-
+    function update(timestamp) {
+      readControls( );
+      updateCamera( );
+      engine.drawWorld(world);
       requestAnimationFrame(update);
+    }
 
-    });
+    update( );
 
-  })
-
-}
-
-function exportRecording(event) {
-  window.open(event.detail);
+  }));
 }

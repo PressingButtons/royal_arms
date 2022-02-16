@@ -51,3 +51,23 @@ window.loadImage = function(url) {
     image.src = url;
   });
 }
+
+window.loadCanvas = function(url) {
+  return loadImage(url).then(image => {
+    let c = generateCanvas(image.width, image.height);
+    c.ctx.drawImage(image, 0, 0);
+    return c;
+  })
+}
+
+window.fetchJSON = url => {
+  return fetch(url).then(response => response.json());
+}
+
+window.fetchText = url => {
+  return fetch(url).then(response => response.text());
+}
+
+window.broadcastEvent = function(type, config) {
+  document.dispatchEvent(new CustomEvent(type, {detail: config}));
+}

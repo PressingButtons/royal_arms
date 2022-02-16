@@ -2,6 +2,7 @@ import compileShader from './modules/shadercompiler.js';
 import createTexture from './modules/createtexture.js';
 import createBuffer from './modules/createbuffer.js';
 import enableVA from './modules/enableVertexAttribute.js';
+import activateTexture from './modules/activatetexture.js';
 
 export default (function(gl) {
 
@@ -12,6 +13,7 @@ export default (function(gl) {
 
   return {
     get gl( ) {return gl},
+    activateTexture: function(i, texture) {return activateTexture(gl, i, texture)},
     compile: function(url) {return compileShader(gl, url)},
     createTexture: function(url) {return createTexture(gl, url)},
     createBuffer: _createBuffer,
