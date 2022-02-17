@@ -7,7 +7,7 @@ export default class Tilemap {
   #collision;
 
   constructor(config) {
-    this.#layers = config.layers.map(x => new TileLayer(x))
+    this.#layers = config.layers.map(x => new TileLayer(x));
     this.#collision = new TileCollisionMap(config.collision)
   }
 

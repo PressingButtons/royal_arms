@@ -1,0 +1,7 @@
+{
+  "dummy": {"type": "sprite", "w": 16, "h": 48},
+  "sandbox0": {"type": "layer"},
+  "sandboxC": {"type": "img"},
+  "test": {"type": "img"},
+  "tiles": {"type": "sprite", "w": 16, "h": 16}
+}

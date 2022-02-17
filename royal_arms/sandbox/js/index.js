@@ -4,10 +4,15 @@ window.onload = event => {
   const canvas = document.getElementById('canvas');
   canvas.width = 384;
   canvas.height = 240;
+
   const engine = new Engine(canvas.getContext('webgl'));
-  engine.init( ).then(( ) =>  engine.initTiles('./assets/sprites/tiles.webp', 16, 16).then(async(tiles) => {
+
+  engine.init( ).then(async function( ) {
 
     const world = await engine.createWorld("sandbox");
+
+    //world.spawn('dummy', {row: 4, col: 9});
+
     let right, left, up, down, zi, zo;
 
     function readControls( ) {
@@ -41,5 +46,5 @@ window.onload = event => {
 
     update( );
 
-  }));
+  });
 }

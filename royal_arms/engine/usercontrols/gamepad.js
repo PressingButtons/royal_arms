@@ -16,13 +16,13 @@ function compareButtons(gamepad, pollpad) {
   }
 }
 
-function comparePad(gampad, pollpad) {
+function comparePad(gamepad, pollpad) {
   compareButtons(gamepad, pollpad);
   compareAxes(gamepad, pollpad);
 }
 
 function connectGamepad(gamepad) {
-  gamepad[gamepad.index] = snapshot(gamepad);
+  snapshot(gamepad);
   gamepads.length ++;
   broadcastEvent('gamepad_connected', {id: gamepad.id, index: gamepad.index});
 }
@@ -36,7 +36,7 @@ function disconnectGamepad(i) {
 function pollGamepads( ) {
   const poll = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
   for(let i = 0; i < poll.length; i++) refreshGamepad(poll[i]);
-  for(let j = 0; j < gamepads.length; j++) validateGamepads(i, poll);
+  for(let j = 0; j < gamepads.length; j++) validateGamepads(j, poll);
 }
 
 function recordAxes(axes, gamepad) {
@@ -46,7 +46,7 @@ function recordAxes(axes, gamepad) {
 }
 
 function recordButtons(buttons, gamepad) {
-  for(let i = 0; gamepad.buttons.length; i++) {
+  for(let i = 0; i < gamepad.buttons.length; i++) {
     buttons[i] = gamepad.buttons[i].value;
   }
 }
@@ -56,12 +56,12 @@ function refreshGamepad(gamepad) {
 }
 
 function snapshot(gamepad) {
-  gamepad[gamepad.index] = {id: gamepad.id, index: gamepad.index, buttons: {}, axes: {}};
-  recordButtons(gamepad[gamepad.id].buttons, gamepad);
-  recordAxes(gamepad[gamepad.id].axes, gamepad);
+  gamepads[gamepad.index] = {id: gamepad.id, index: gamepad.index, buttons: {}, axes: {}};
+  recordButtons(gamepads[gamepad.index].buttons, gamepad);
+  recordAxes(gamepads[gamepad.index].axes, gamepad);
 }
 
-function validateGamepads(index, poll) {
+function validateGamepads(i, poll) {
   if(!poll[i]) disconnectGamepad(i);
   else comparePad(gamepads[i], poll[i]);
 }
@@ -70,6 +70,6 @@ export function update( ) {
   pollGamepads( )
 }
 
-export function gamepads( ) {
+export function pads( ) {
   return Object.assign({}, gamepads);
 }

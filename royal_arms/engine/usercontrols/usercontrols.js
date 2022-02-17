@@ -7,7 +7,7 @@ export default function( ) {
 
   Keyboard.init( );
 
-  pollGamepads( ) {
+  function pollGamepads( ) {
     pid = requestAnimationFrame(updateGamepads);
   }
 

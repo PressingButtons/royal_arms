@@ -71,3 +71,13 @@ window.fetchText = url => {
 window.broadcastEvent = function(type, config) {
   document.dispatchEvent(new CustomEvent(type, {detail: config}));
 }
+
+window.listDirectory = function(dir, key) {
+  return fetchText(dir).then(html => {
+    const div = generateElement('div');
+    div.innerHTML = html;
+    let search = key ? 'a.' + key : 'a';
+    const paths = [...div.querySelectorAll(search)].map(x => pathname);
+    return paths.map(url => url.replace(`/${dir}/`, './'));
+  })
+}

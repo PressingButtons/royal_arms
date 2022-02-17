@@ -12,7 +12,7 @@ export default class World extends State {
   constructor(config) {
     super(null, 'world');
     this.#meta = config.meta;
-    this.#tilemap = new Tilemap(config.tilemap)
+    this.#tilemap = new Tilemap(config)
     this.#camera = new Camera(config.meta.w, config.meta.h);
     this.#entities = [];
   }
@@ -26,5 +26,7 @@ export default class World extends State {
       e_index: this.#meta.e_index
     }
   }
+
+
 
 }

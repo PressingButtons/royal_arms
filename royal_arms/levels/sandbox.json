@@ -1,0 +1,7 @@
+{
+  "meta": {},
+  "tilemap" : {
+    "collision": "sandboxC",
+    "layers": ["sandbox0"]
+  }
+}

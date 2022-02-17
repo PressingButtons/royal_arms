@@ -1,7 +1,0 @@
-{
-  "meta": {},
-  "tilemap" : {
-    "collision": "./assets/levels/src/sandboxC.webp",
-    "layers": ["./assets/levels/src/sandbox0.webp"]
-  }
-}
