@@ -1,1 +1,10 @@
 stage size - 1040 x 432 (max editor size);
+camera - 384 - 240;
+platform fighter
+
+character concepts {
+  assemble - convenire
+  form     - forma / (tufos) < hebrew
+  human -> earthen -> humus -> homo. (earth being?)
+  being he. 0להיות
+}

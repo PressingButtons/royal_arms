@@ -34,8 +34,8 @@ export default class TileCollisionMap {
   }
 
   getTileByIndex(row, col) {
-    if(!this.#tiles[row] || !this.tiles[row][col]) return null;
-    return this.#tiles[row][col];
+    if(!this.#tiles[row] || !this.#tiles[row][col]) return null;
+    return this.#tiles[row][col].join('.');
   }
 
   getTileByPosition(x, y, tilesize) {

@@ -11,7 +11,7 @@ window.onload = event => {
 
     const world = await engine.createWorld("sandbox");
 
-    //world.spawn('dummy', {row: 4, col: 9});
+    let dummy = engine.spawn('dummy', world, {row: 14, col: 9});
 
     let right, left, up, down, zi, zo;
 
@@ -26,25 +26,43 @@ window.onload = event => {
 
     function updateCamera( ) {
       let movex = 0, movey = 0, s = 0;
-      if(right) movex += 1;
-      if(left) movex -= 1;
-      if(up) movey -= 1;
+      if(right) {
+        movex += 1;
+        dummy.dir = 1;
+      }
+      if(left) {
+        movex -= 1;
+        dummy.dir = -1;
+      }
+      if(up) dummy.velocity.y = -0.25;
       if(down) movey += 1;
       if(zi) s += 0.01;
       if(zo) s -= 0.01;
-      world.camera.x += movex;
-      world.camera.y += movey;
-      world.camera.scale = world.camera.scale + s;
+      dummy.x += movex;
+      dummy.y += movey;
     }
 
-    function update(timestamp) {
+    function onUpdate(dt) {
       readControls( );
       updateCamera( );
-      engine.drawWorld(world);
-      requestAnimationFrame(update);
     }
 
-    update( );
+    engine.run(onUpdate);
 
+
+    let last;
+
+    function update(timestamp) {
+      if(!last) last = timestamp;
+      let now = performance.now( );
+      const dt = now - last;
+      readControls( );
+      updateCamera( );
+      world.update({dt: dt})
+      engine.drawWorld(world);
+      last = timestamp;
+      requestAnimationFrame(update);
+    }
+    //requestAnimationFrame(update);
   });
 }

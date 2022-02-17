@@ -1,6 +1,7 @@
 import State from '../statemachine/state.js';
 import Tilemap from '../tilemap/tilemap.js';
 import Camera from './camera.js';
+import TilePhysics from '../physics/tilephysics.js';
 
 export default class World extends State {
 
@@ -8,16 +9,19 @@ export default class World extends State {
   #tilemap;
   #entities;
   #camera;
+  #physics;
 
   constructor(config) {
     super(null, 'world');
     this.#meta = config.meta;
-    this.#tilemap = new Tilemap(config)
+    this.#tilemap = new Tilemap(config);
+    this.#physics = new TilePhysics(this.#tilemap.collision_map, 16);
     this.#camera = new Camera(config.meta.w, config.meta.h);
     this.#entities = [];
   }
 
-  get camera( ) {return this.#camera;}
+  get camera( ) {return this.#camera};
+  get size( ) {return this.#meta.size};
 
   renderList( ) {
     return {
@@ -27,6 +31,15 @@ export default class World extends State {
     }
   }
 
+  addObject(object) {
+    this.#entities.push(object);
+  }
 
+  update(config) {
+    for(const entity of this.#entities) {
+      entity.update(config);
+      this.#physics.update(entity, config.dt)
+    }
+  }
 
 }

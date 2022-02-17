@@ -1,12 +1,12 @@
-import CollisionMap from '../modules/collisionmap.js';
+import GameObject from '../objects/gameobject.js'
 
-export default class TilemapPhysics {
+export default class TilePhysics {
 
   #map;
   #tilesize;
 
-  constructor(canvas, tilesize) {
-    this.#map = new CollisionMap(canvas);
+  constructor(map, tilesize) {
+    this.#map = map;
     this.#tilesize = tilesize;
   }
 
@@ -14,17 +14,20 @@ export default class TilemapPhysics {
   get height( ) {return this.#map.h};
 
   #getTilePosition(gameobject) {
+
     const l = (gameobject.left / this.#tilesize)|0;
     const r = (gameobject.right / this.#tilesize)|0;
     const t = (gameobject.top / this.#tilesize)|0;
     const b = (gameobject.bottom / this.#tilesize)|0;
 
+
+
     return {
       l: l, r: r, t: t, b: b,
-      tl: this.#map.tile(t,l),
-      tr: this.#map.tile(t,r),
-      bl: this.#map.tile(b,l),
-      br: this.#map.tile(b,r)
+      tl: this.#map.getTileByIndex(t, l),
+      tr: this.#map.getTileByIndex(t,r),
+      bl: this.#map.getTileByIndex(b,l),
+      br: this.#map.getTileByIndex(b,r)
     }
 
   }
@@ -38,12 +41,12 @@ export default class TilemapPhysics {
 
   #resolveX(gameobject) {
     let pos = this.#getTilePosition(gameobject);
-    if(pos.tl == 1 || pos.bl == 1) {
-      gameobject.left = pos.l * this.#tilesize;
+    if(pos.tl == '1.0' || pos.bl == '1.0') {
+      gameobject.left = (pos.l + 1) * this.#tilesize;
       pos = this.#getTilePosition(gameobject);
     }
-    if(pos.tr == 1 || pos.br == 1) {
-      gameobject.right = pos.r * this.#tilesize;;
+    if(pos.tr == "1.0" || pos.br == "1.0") {
+      gameobject.right = pos.r * this.#tilesize - 1;
     }
   }
 
@@ -51,9 +54,11 @@ export default class TilemapPhysics {
     let pos = this.#getTilePosition(gameobject);
     if(pos.tl == 1 || pos.tr == 1) {
       gameobject.top = (pos.t + 1) * this.#tilesize;
+       pos = this.#getTilePosition(gameobject);
     }
-    if(pos.bl == 1 || pos.br == 1) {
-      gameobject.bottom = pos.b * this.#tilesize;;
+    if(pos.bl === '1.0' || pos.br === '1.0') {
+      gameobject.bottom = pos.b * this.#tilesize - 0.1;
+      gameobject.velocity.y = 0;
     }
   }
 

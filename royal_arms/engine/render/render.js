@@ -37,8 +37,8 @@ export default class RenderEngine {
     this.#utils.gl.clear(this.#utils.gl.COLOR_BUFFER_BIT);
   }
 
-  drawEntity(e, camera) {
-    this.drawSprite(e.sprite, e.index, e.transform, camera);
+  drawEntity(e, world) {
+    this.drawSprite(e.sprite, e.currentFrameIndex, e.transform(world), world.camera);
   }
 
   drawLayer(atlas, layer, camera) {
@@ -80,8 +80,8 @@ export default class RenderEngine {
     gl.uniformMatrix4fv(shader.uniforms.u_sprite_transform, false, spriteTransform);
     gl.uniformMatrix4fv(shader.uniforms.u_camera_transform, false, camera.transform);
     gl.uniformMatrix4fv(shader.uniforms.u_camera_ortho, false, camera.ortho);
-    gl.uniform2fv(shader.uniforms_u_sprite_factor, sprite.sf);
-    gl.uniform2fv(shader.uniforms_u_index, spriteIndex);
+    gl.uniform2fv(shader.uniforms.u_sprite_factor, sprite.sf);
+    gl.uniform2fv(shader.uniforms.u_index, spriteIndex);
     this.#utils.activateTexture(0, sprite.texture);
     gl.drawArrays(gl.TRIANGLES, 0, 6);
   }
@@ -109,10 +109,10 @@ export default class RenderEngine {
       this.drawLayer(atlas, layer, world.camera);
       if(i == renderInfo.e_index) {
         entitiesDrawn = true;
-        for(const entity of renderInfo.entities) this.drawEntity(entity, world.camera);
+        for(const entity of renderInfo.entities) this.drawEntity(entity, world);
       }
       if(!entitiesDrawn)
-      for(const entity of renderInfo.entities) this.drawEntity(entity, world.camera);
+        for(const entity of renderInfo.entities) this.drawEntity(entity, world);
     }
   }
 
