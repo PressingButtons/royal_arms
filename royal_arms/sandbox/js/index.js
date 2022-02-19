@@ -1,4 +1,5 @@
 import Engine from '../../engine/engine.js';
+import Recorder from '../../modules/recorder.js';
 
 window.onload = event => {
   const canvas = document.getElementById('canvas');
@@ -6,6 +7,11 @@ window.onload = event => {
   canvas.height = 240;
 
   const engine = new Engine(canvas.getContext('webgl'));
+
+  const recorder = new Recorder(canvas);
+  document.addEventListener('downloadrecording', event => {
+    window.open(event.detail);
+  });
 
   engine.init( ).then(async function( ) {
 
@@ -15,6 +21,8 @@ window.onload = event => {
 
     let right, left, up, down, zi, zo;
 
+    let recording = false
+
     function readControls( ) {
       right = engine.controls.keyIsDown('d');
       left = engine.controls.keyIsDown('a');
@@ -22,6 +30,16 @@ window.onload = event => {
       down = engine.controls.keyIsDown('s');
       zi = engine.controls.keyIsDown('z');
       zo = engine.controls.keyIsDown('x');
+      if(engine.controls.keyIsDown('r') && !recording) {
+        console.log('record start');
+        recorder.start( );
+        recording = true;
+      }
+      if(engine.controls.keyIsDown('t') && recording) {
+        console.log('record end');
+        recorder.stop( );
+        recording = false;
+      }
     }
 
     function updateCamera( ) {

@@ -1,4 +1,4 @@
-import GameObject from '../gameobject.js';
+import GameObject from '../gameobject/gameobject.js';
 import LandState from './land.js';
 import AerialState from './air.js';
 
@@ -9,8 +9,8 @@ export default class Warrior extends GameObject {
   #landState;
   #airState;
 
-  constructor(width, height, sprite, body = null) {
-    super(width, height, sprite, body);
+  constructor(config) {
+    super(config);
     this.#landState = this.addState(new LandState(this))
     this.#airState = this.addState(new AerialState(this));
     this.switchState(this.#airState.name);

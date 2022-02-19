@@ -1,4 +1,4 @@
-export default class State {
+export default class State extends EventTarget {
 
   #machine
   #name;
@@ -7,6 +7,7 @@ export default class State {
   #states = { };
 
   constructor(name, machine) {
+    super( );
     this.#machine = machine || this;
     this.#name = name;
   }

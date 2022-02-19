@@ -1,13 +1,10 @@
-import State from '../statemachine/state.js';
-import Vector from '../physics/vector.js'
-
-const IDENTITY_MATRIX = glMatrix.mat4.create( );
+import State from '../state.js';
+import Animator from './animator.js';
+import GoBody from './body.js';
 
 const AutoId = (function( ) {
   let n = 0;
-  return function( ) {
-    this.id = n++;
-  }
+  return function( ) {this.id = n++};
 })( );
 
 export default class GameObject extends State {
@@ -15,17 +12,29 @@ export default class GameObject extends State {
   #sprite;
   #transform = glMatrix.mat4.create( );
   #index;
+  #animator;
+  #frameData = {};
+  #w;
+  #h;
+  #dir;
 
-  constructor(w, h, sprite, body) {
+  constructor(config) {
     super("go" + String(new AutoId( ).id).padStart(4, '0'), null);
+    this.body = new GoBody(this);
+    this.body = config.body;
     this.setPosition(0, 0);
-    this.w = w;
-    this.h = h;
-    this.body = body || {x: 0, y: 0, w: w, h: h}
-    this.velocity = new Vector( );
-    this.#index = [0, 0];
-    this.#sprite = sprite;
+    this.#w = config.w;
+    this.#h = config.h;
+    this.velocity = new Vector();
+    this.#dir = 0 ;
+    this.#animator = new Animator(this);
+    this.#index = [this.currentIndex, this.dir];
+    this.#sprite = config.sprite;
+    this.#frameData = config.frameData;
   }
+
+  get w( ) {return this.#w};
+  get h( ) {return this.#h};
 
   get left( ) {return this.x + this.body.x};
   set left(n) {this.x = n - this.body.x};
@@ -48,15 +57,27 @@ export default class GameObject extends State {
     }
   }
 
-  get dir( ){return this.#index[1]}
+  get dir( ){return this.#dir}
   set dir(n) {
-    if(n > 0) this.#index[1] = 0;
-    else this.#index[1] = 1;
+    if(n > 0) this.#dir = 0;
+    else this.#dir = 1;
   }
 
-  get currentFrameIndex( ) {return this.#index}
+  get currentFrameData( ) {
+    return this.#animator.current;
+  }
 
   //private
+  #readFrame( ) {
+    const frame = this.#frameData(this.#animator.current.index);
+    if(!frame || !frame.body) return;
+    this.body.x = frame.body.x || 0;
+    this.body.x = frame.body.y || 0;
+    this.body.w = frame.body.w || this.w;
+    this.body.h = frame.body.h || this.h;
+
+  }
+
   #transformWorld(world) {
     glMatrix.mat4.translate(this.#transform, this.#transform, [-this.w/2, -this.h/2, 0]);
     glMatrix.mat4.rotateZ(this.#transform, this.#transform, this.dir);
@@ -87,6 +108,11 @@ export default class GameObject extends State {
     //if(world) this.#transformWorld(world);
     glMatrix.mat4.translate(this.#transform, this.#transform, [this.x, this.y, 0]);
     return this.#transform;
+  }
+
+  onUpdate(config) {
+    this.#animator.update(config.dt);
+    this.#readFrame( );
   }
 
 }

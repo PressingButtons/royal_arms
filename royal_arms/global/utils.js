@@ -77,7 +77,7 @@ window.listDirectory = function(dir, key) {
     const div = generateElement('div');
     div.innerHTML = html;
     let search = key ? 'a.' + key : 'a';
-    const paths = [...div.querySelectorAll(search)].map(x => pathname);
-    return paths.map(url => url.replace(`/${dir}/`, './'));
+    const paths = [...div.querySelectorAll(search)].map(x => x.pathname);
+    return paths//.map(url => url.replace(`/${dir}/`, './'));
   })
 }

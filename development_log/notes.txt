@@ -8,3 +8,25 @@ character concepts {
   human -> earthen -> humus -> homo. (earth being?)
   being he. 0להיות
 }
+
+2/172022 {
+  I see there are some hiccups with the current rendering code.
+  Slight flickering and stretchiness(?) occuring at the edges.
+  The cropping for sprites/tilemaps are done via math rather than set values.
+  will have to address that in the future.
+
+  Basic tile collision is in place.
+}
+
+
+2/18/2022 {
+  Need to create a custom frame editor
+  Frame [
+    sprite index
+    duration
+    updates objects hurt, hit and body boxes
+    function to execute while on index
+  ]
+  an object holding animation arrays and an object that houses
+  each frames data?
+}
