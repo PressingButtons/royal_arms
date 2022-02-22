@@ -1,0 +1,8 @@
+{
+  "maps" : ["sandbox0"],
+  "sprites" : {
+    "dummy" : [16, 48],
+    "tiles" : [16, 16]
+  },
+  "images" : ["sandboxC", "test"]
+}

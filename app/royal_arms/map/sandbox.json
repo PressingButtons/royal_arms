@@ -1,0 +1,9 @@
+{
+  "meta": {
+    "size": {"w": 384, "h": 240}
+  },
+  "tilemap" : {
+    "collision": "sandboxC",
+    "layers": [{"sprite": "sandbox0", "px" : 0, "py" : 0}]
+  }
+}

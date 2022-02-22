@@ -1,6 +1,0 @@
-{
-  "vertex" : "./shaders/src/sprite-vertex.glsl",
-  "fragment" : "./shaders/src/sprite-fragment.glsl",
-  "attributes" : ["a_position", "a_texture"],
-  "uniforms"   : ["u_camera_transform", "u_camera_ortho", "u_sprite_transform", "u_index", "u_sprite_factor"]
-}
