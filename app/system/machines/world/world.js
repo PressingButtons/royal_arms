@@ -43,6 +43,12 @@ export default class World extends State {
     this.addLink(this.#stop, this.#run, 'run');
   }
 
+  #updateObjects(dt) {
+    for(const object of this.#objects) {
+      object.update({dt: dt});
+    }
+  }
+
   stop( ) {
     this.dispatchEvent(new Event('stop'));
   }
@@ -59,6 +65,7 @@ export default class World extends State {
 
   onUpdate(dt) {
     if(this.#onUpdate) this.#onUpdate(dt);
+    this.#updateObjects(dt);
     System.Graphics.drawWorld(this);
   }
 

@@ -2,7 +2,8 @@
   "maps" : ["sandbox0"],
   "sprites" : {
     "dummy" : [16, 48],
-    "tiles" : [16, 16]
+    "tiles" : [16, 16],
+    "hadsha": [192, 192]
   },
   "images" : ["sandboxC", "test"]
 }

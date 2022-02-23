@@ -20,11 +20,16 @@ export default class Animator {
     return this.#currentIndex;
   }
 
+  get currentFrame( ) {
+    if(this.#currentAnimation) return this.#currentAnimation.animation[this.#currentIndex];
+    else return this.#currentIndex;
+  }
+
   #updateAnimation(animation, dt) {
     this.#currentTime += dt;
-    let pair = animation.slice(this.#currentIndex, this.#currentIndex + 1);
+    let pair = animation.slice(this.#currentIndex, this.#currentIndex + 2);
     if(this.#currentTime >= pair[1]) {
-      this.#currentIndex++;
+      this.#currentIndex += 2;
       this.#currentTime = 0;
     }
     if(this.#currentIndex > (animation.length / 2) | 0)  {
@@ -35,13 +40,11 @@ export default class Animator {
   }
 
   play(animation_name, start = 0) {
-    console.log('fire');
     const animation = this.#animations[animation_name];
     if(!animation) throw 'Animator.play - No such animation labeled: ' + animation_name;
     if(this.#currentAnimation && this.#currentAnimation.animation == animation) return;
     this.#currentAnimation = {name: animation_name, animation: animation};
-    this.#currentIndex = animation[start];
-    console.log(this.#currentIndex)
+    this.#currentIndex = start;
     this.#currentTime = 0;
   }
 

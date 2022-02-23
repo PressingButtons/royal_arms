@@ -1,18 +1,32 @@
+import Animator from '../modules/animator.js';
+
 const autoid = new Utils.AutoId( );
 
 export default class GameObject extends EventTarget {
 
   #id;
   #config;
+  #animator;
+  #dir = 0;
   #position = new Int16Array(2);
 
   constructor(config) {
     super( );
     this.#id= "go" + autoid.next.padStart(4, '0');
     this.#config = config;
+    this.#animator = new Animator(this, config.animations);
   }
 
-  get sprite( ) {return this.#config.sprite}
+  get index( ) {
+    return [this.#animator.currentFrame, this.#dir]
+  }
+
+  get dir( ) {return this.#dir}
+  set dir(n) {this.#dir = n > 0 ? 1 : 0}
+
+  get sprite( ) {return this.#config.sprite};
+
+  get currentFrameData( ) {return this.#animator.current};
 
   get x( ) {return this.#position[0]};
   set x(n) {this.#position[0] = n};
@@ -54,7 +68,19 @@ export default class GameObject extends EventTarget {
     return glMatrix.mat4.fromTranslation(glMatrix.mat4.create(), [this.x, this.y, 0]);
   }
 
+  #update(config) {
+    this.onUpdate(config);
+    this.#animator.update(config.dt);
+  }
+
+  get update( ) {return this.#update}
+
   //methods
+  animate(name, index = 0) {
+    if(!this.#config.animations[name]) return;
+    this.#animator.play(name, index);
+  }
+
   move(...parms) {
     let dx, dy;
     if(parms[0] instanceof System.Vector) {
@@ -74,4 +100,7 @@ export default class GameObject extends EventTarget {
     this.y = parseInt(y) || this.y;
   }
 
+  onUpdate(config) {
+
+  }
 }

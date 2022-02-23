@@ -12,6 +12,7 @@ export default class Run extends State {
     if(!this.#lastStep) this.#lastStep = timestamp;
     const dt = timestamp - this.#lastStep;
     this.#lastStep = timestamp;
+    //exec worldly functions
     this.machine.update(dt);
   }
 

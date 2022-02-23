@@ -55,7 +55,7 @@ export function drawLayer(shader, world, i) {
 }
 
 export function drawGameObject(shader, object, camera) {
-  drawSprite(shader, object.sprite, [0,1], object.transform, camera);
+  drawSprite(shader, object.sprite, object.index, object.transform, camera);
 }
 
 

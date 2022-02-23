@@ -6,6 +6,7 @@ import * as GameWorld from './libs/gameworld/lib.js'
 import * as Graphics from './libs/graphics/graphicslib.js';
 import Inputs from './libs/inputs/inputlib.js';
 import Spawn from './routines/spawn.js';
+import Recorder from './modules/recorder.js';
 
 const _TILESIZE = 16;
 const _cache = new Cache( );
@@ -33,7 +34,8 @@ function expandSystem( ) {
     GameWorld: {value: GameWorld},
     Inputs: {value: Inputs()},
     spawn: {value: Spawn},
-    Vector: {value: Vector}
+    Vector: {value: Vector},
+    Recorder: {value: Recorder},
   })
 }
 

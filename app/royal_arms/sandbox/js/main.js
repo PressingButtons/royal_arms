@@ -8,11 +8,23 @@ export default function main( ) {
 
   function onLoad(world) {
 
-    const dummy = System.spawn('dummy', world);
+    const dummy = System.spawn('hadsha', world);
 
     const inputs = System.Inputs;
 
     let left, right, up, down;
+
+    function adjustCamera( ) {
+      let s = 0, mx = 0, my = 0
+      if(inputs.keyIsDown('z')) s += 0.01;
+      if(inputs.keyIsDown('x')) s -= 0.01;
+      if(inputs.keyIsDown('arrowup')) my -= 1;
+      if(inputs.keyIsDown('arrowdown')) my += 1;
+      if(inputs.keyIsDown('arrowleft')) mx -= 1;
+      if(inputs.keyIsDown('arrowright')) mx += 1;
+      world.camera.scale += s;
+      world.camera.move(mx, my);
+    }
 
     function directionals( ) {
       left = inputs.keyIsDown('a');
@@ -23,14 +35,26 @@ export default function main( ) {
 
     function moveDummy( ) {
       let mx = 0, my = 0;
-      if(left) mx -= 1;
-      if(right) mx += 1;
+      if(left) {
+        mx -= 1;
+        dummy.dir = 1;
+        dummy.animate('walk');
+      }
+      if(right) {
+        mx += 1;
+        dummy.dir = 0;
+        dummy.animate('walk');
+      }
       if(up) my -= 1;
       if(down) my += 1;
-      if(dummy) dummy.move(mx, my);
+      if(dummy) {
+        dummy.move(mx, my);
+        if(mx == 0) dummy.animate('idle');
+      }
     }
 
     function update( ) {
+      adjustCamera( );
       directionals( );
       moveDummy( );
     }
